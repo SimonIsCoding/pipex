@@ -27,16 +27,16 @@ Think of pipes like a water pipe system:
 ### Program Flow Diagram
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
+┌─────────────┐     ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │   infile    │───▶│   cmd1      │───▶│   cmd2      │───▶│   cmd3      │
-│  (input)    │    │  (process)  │    │  (process)  │    │  (process)  │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-                                                           │
-                                                           ▼
-                                                    ┌─────────────┐
-                                                    │   outfile   │
-                                                    │  (output)   │
-                                                    └─────────────┘
+│  (input)    │     │  (process)  │     │  (process)  │     │  (process)  │
+└─────────────┘     └─────────────┘     └─────────────┘     └─────────────┘
+                                                                   │
+                                                                   ▼
+                                                            ┌─────────────┐
+                                                            │   outfile   │
+                                                            │  (output)   │
+                                                            └─────────────┘
 ```
 
 ### Process Creation Schema
@@ -208,14 +208,14 @@ if (pipe(pipe_fd) == -1) {
 
 **How it works**:
 ```
-Process A                    Process B
-     │                          │
-     │ writes to pipe_fd[1]     │ reads from pipe_fd[0]
-     ▼                          ▼
-┌─────────────┐            ┌─────────────┐
+Process A                         Process B
+     │                               │
+     │ writes to pipe_fd[1]          │ reads from pipe_fd[0]
+     ▼                               ▼
+┌─────────────┐             ┌─────────────┐
 │   PIPE      │───────────▶│   PIPE      │
-│  (buffer)   │            │  (buffer)   │
-└─────────────┘            └─────────────┘
+│  (buffer)   │             │  (buffer)   │
+└─────────────┘             └─────────────┘
 ```
 
 ### 2. `fork()` - Process Creation
@@ -251,14 +251,14 @@ if (pid == -1) {
 
 **What happens after fork()**:
 ```
-Before fork():     After fork():
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Parent    │    │   Parent    │    │    Child    │
+ Before fork():      After fork():
+┌─────────────┐     ┌─────────────┐    ┌─────────────┐
+│   Parent    │     │   Parent    │    │    Child    │
 │   Process   │───▶│   Process   │    │   Process   │
-│             │    │             │    │             │
-└─────────────┘    └─────────────┘    └─────────────┘
-                   (returns child    (returns 0)
-                    PID)             
+│             │     │             │    │             │
+└─────────────┘     └─────────────┘    └─────────────┘
+                    (returns child       (returns 0)
+                     PID)                
 ```
 
 ### 3. `execve()` - Program Execution
